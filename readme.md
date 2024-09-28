@@ -1,6 +1,6 @@
-# Social Media Lookup Bot
+# Social Media Lookup Agent
 
-A Flask-based Social Media Lookup bot that uses the Groq API and RapidAPI to fetch and display social media profiles based on user input. The bot processes instructions from the frontend, scrapes social media data, and returns results in a structured JSON format. Includes server-side session management and a responsive frontend interface.
+A Flask-based Social Media Lookup agent that uses the Groq API and RapidAPI to fetch and display social media profiles based on user input. The bot processes instructions from the frontend, scrapes social media data, and returns results in a structured JSON format. Includes server-side session management and a responsive frontend interface.
 
 ## Features
 
@@ -16,8 +16,8 @@ A Flask-based Social Media Lookup bot that uses the Groq API and RapidAPI to fet
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/social-media-lookup-bot.git
-    cd social-media-lookup-bot
+    git clone https://github.com/yourusername/social-media-lookup-agent.git
+    cd social-media-lookup-agent
     ```
 
 2. Create a virtual environment and activate it:
@@ -63,9 +63,9 @@ A Flask-based Social Media Lookup bot that uses the Groq API and RapidAPI to fet
 
 - `app.py`: Main Flask application file.
 - `main.py`: Contains the core logic for processing user input and interacting with the Groq API.
-- `actions.py`: Defines actions that can be performed by the bot, such as fetching social media data using RapidAPI.
+- `actions.py`: Defines actions that can be performed by the agent, such as fetching social media data using RapidAPI.
 - `helper.py`: Helper functions for extracting JSON from text.
-- `prompt.py`: System prompt for the bot.
+- `prompt.py`: System prompt for the agent.
 - `views/index.html`: Frontend interface using Tailwind CSS.
 - `.env.example`: Example environment variables for API keys and configuration.
 
