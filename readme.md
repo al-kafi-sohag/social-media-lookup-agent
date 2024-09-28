@@ -2,7 +2,7 @@
 
 A Flask-based Social Media Lookup agent that uses the Groq API and RapidAPI to fetch and display social media profiles based on user input. The bot processes instructions from the frontend, scrapes social media data, and returns results in a structured JSON format. Includes server-side session management and a responsive frontend interface.
 
-![Demo](./demo.gif)
+![Demo](./demo.mp4)
 
 ## Features
 

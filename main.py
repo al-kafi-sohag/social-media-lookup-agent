@@ -23,7 +23,7 @@ messages = [
 
 # Get environment variables for limit checker
 LIMIT_CHECKER_ENABLED = os.getenv("LIMIT_CHECKER_ENABLED", "false").lower() == "true"
-LIMIT_SLEEP_TIME = int(os.getenv("LIMIT_SLEEP_TIME", 15))
+LIMIT_SLEEP_TIME = int(os.getenv("LIMIT_SLEEP_TIME", 10))
 EMPTY_RESPONSE_LIMIT = int(os.getenv("EMPTY_RESPONSE_LIMIT", 3))
 MAX_LOOP_LIMIT = int(os.getenv("MAX_LOOP_LIMIT"), 5)
 
