@@ -16,7 +16,7 @@ A Flask-based Social Media Lookup agent that uses the Groq API and RapidAPI to f
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/social-media-lookup-agent.git
+    git clone https://github.com/al-kafi-sohag/social-media-lookup-agent.git
     cd social-media-lookup-agent
     ```
 
