@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Lookup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-bg {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: backgroundAnimation 15s ease infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 animated-bg">
+    <div class="max-w-2xl mx-auto bg-white bg-opacity-90 rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105">
+        <div class="p-8">
+            <header class="text-center mb-8">
+                <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-2 float-animation">Social Media Lookup</h1>
+                <p class="text-gray-600 animate-pulse">Enter a name to search across social media platforms</p>
+            </header>
+            <form id="lookupForm" class="mb-6">
+                <div class="flex">
+                    <input type="text" id="userName" placeholder="Enter name" required
+                        class="flex-grow px-4 py-2 rounded-l-lg border-2 border-purple-500 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all duration-300">
+                    <button type="submit" id="submitBtn"
+                        class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-r-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105">
+                        Search
+                    </button>
+                </div>
+            </form>
+            <div id="statusMessage" class="text-center font-semibold mt-3 mb-3 mb-4 transition-all duration-300"></div>
+            <div id="response" class="bg-white bg-opacity-75 rounded-lg p-4 overflow-x-auto transition-all duration-300 opacity-0 scale-95"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOMContentLoaded");
+            const form = document.getElementById('lookupForm');
+            const input = document.getElementById('userName');
+            const submitBtn = document.getElementById('submitBtn');
+            const responseDiv = document.getElementById('response');
+            const statusMessageDiv = document.getElementById('statusMessage');
+            let chatId = null;
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const userName = input.value.trim();
+                if (!userName) return;
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Searching...';
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                responseDiv.textContent = '';
+                statusMessageDiv.textContent = '';
+                responseDiv.classList.remove('opacity-100', 'scale-100');
+                responseDiv.classList.add('opacity-0', 'scale-95');
+
+                axios.post('/', `userName=${encodeURIComponent(userName)}`, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(response => {
+                    chatId = response.data.chat_id;
+                    if (chatId) {
+                        console.log("called")
+                        setTimeout(() => checkProgress(chatId), 10);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    statusMessageDiv.textContent = 'Error: Failed to fetch data';
+                    statusMessageDiv.className = 'text-red-500 animate-bounce';
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Search';
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                });
+            });
+
+            function handleResponse(data) {
+                console.log(data);
+                const { status, message } = data;
+                console.log(message);
+                responseDiv.textContent = JSON.stringify(message, null, 2);
+                responseDiv.classList.remove('opacity-0', 'scale-95');
+                responseDiv.classList.add('opacity-100', 'scale-100');
+
+                switch (status) {
+                    case 0:
+                        input.value = '';
+                        statusMessageDiv.className = 'text-red-500 animate-bounce';
+                        break;
+                    case 1:
+                        statusMessageDiv.textContent = 'Waiting for user input. Please provide more information.';
+                        statusMessageDiv.className = 'text-blue-500 animate-pulse';
+                        break;
+                    case 10:
+                        statusMessageDiv.textContent = 'Processing your request...';
+                        statusMessageDiv.className = 'text-yellow-500 animate-pulse';
+                        break;
+                    case 100:
+                        statusMessageDiv.textContent = 'Search completed successfully!';
+                        statusMessageDiv.className = 'text-green-500 animate-bounce';
+                        displayDetailedResults(data.details);
+                        break;
+                    default:
+                        statusMessageDiv.textContent = 'Unknown status. Please try again.';
+                        statusMessageDiv.className = 'text-red-500 animate-bounce';
+                }
+            }
+
+            function checkProgress(chatId) {
+                console.log(`checkProgress called with chatId: ${chatId}`); // Log when function is called
+                axios.post('/process', { chat_id: chatId })
+                .then(response => {
+                    console.log('checkProgress response:', response); // Log the response
+                    handleResponse(response.data.result);
+                })
+                .catch(error => {
+                    console.error('Error checking progress:', error);
+                    statusMessageDiv.textContent = 'Error checking progress. Please try again.';
+                    statusMessageDiv.className = 'text-red-500 animate-bounce';
+                });
+            }
+
+            function displayDetailedResults(details) {
+                const platforms = Object.keys(details);
+                let html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+                
+                platforms.forEach(platform => {
+                    console.log("platform", platform)
+                    let platformData = details[platform];
+                    console.log("Data", platformData)
+                    
+                    // Check if platformData is a string and split it
+                    if (typeof platformData === 'string') {
+                        platformData = platformData.split(',').filter(link => link.trim() !== '');
+                    }
+                    
+                    // Check if platformData is an array
+                    if (Array.isArray(platformData)) {
+                        const totalResults = platformData.length;
+
+                        if (totalResults === 0) {
+                            html += `
+                                <div class="bg-gray-100 p-4 rounded-lg">
+                                    <h3 class="text-xl font-semibold capitalize mb-2">${platform}</h3>
+                                    <p class="text-sm text-gray-600 mb-2">No accounts found</p>
+                                </div>
+                            `;
+                        } else {
+                            html += `
+                                <div class="bg-gray-100 p-4 rounded-lg">
+                                    <h3 class="text-xl font-semibold capitalize mb-2">${platform}</h3>
+                                    <p class="text-sm text-gray-600 mb-2">Total results: ${totalResults}</p>
+                                    <ul class="list-disc list-inside">
+                                        ${platformData.map(link => {
+                                            const username = link.split('/').pop();
+                                            return `<li class="truncate"><a href="${link}" target="_blank" class="text-blue-600 hover:underline">${username}</a></li>`;
+                                        }).join('')}
+                                    </ul>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        console.error(`Unexpected data type for platform ${platform}:`, platformData);
+                    }
+                });
+
+                html += '</div>';
+                responseDiv.innerHTML = html;
+            }
+        });
+    </script>
+</body>
+</html>
