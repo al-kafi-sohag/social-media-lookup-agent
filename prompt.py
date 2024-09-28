@@ -30,7 +30,7 @@ For returning any information, use only a JSON format like this:
   "message": "Your Message",
   "function_name": "fetch_social_media_data",
   "function_params": {
-    "name": "the exact user name"
+    "name": "the exact name of the user"
   },
   "status": 1 if you are waiting for user input, 10 if you are in action, 100 if you are done, or 0 if there is an error
 }
