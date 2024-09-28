@@ -39,13 +39,17 @@ A Flask-based Social Media Lookup agent that uses the Groq API and RapidAPI to f
 
     Edit the `.env` file to add your API keys and configuration:
     ```env
+    # Groq API Key: Obtain from https://groq.com
     GROQ_API_KEY="your_groq_api_key"
     MODEL="llama-3.1-70b-versatile"
+
+    # Rapid API Key: Obtain from https://rapidapi.com/hub
     RAPID_API_KEY="your_rapid_api_key"
+
     MAX_LOOP_LIMIT="4"
     LIMIT_CHECKER_ENABLED="true"
     LIMIT_SLEEP_TIME="5"
-    EMPTY_RESPONSE_LIMIT="0"
+    EMPTY_RESPONSE_LIMIT="3"
     ```
 
 ## Usage

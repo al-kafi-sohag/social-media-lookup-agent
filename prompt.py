@@ -71,8 +71,7 @@ Example Output:
 
 {
   "success": true,
-  "message": "I found the following social media links for the name: john doe. Facebook: total (count the total Facebook links) results found. Instagram: total (count the total Instagram links) results found. Twitter: total (count the total Twitter links) results found. LinkedIn: total (count the total LinkedIn links) results found. GitHub: total (count the total GitHub links) results found. YouTube: total (count the total YouTube links) results found. Pinterest: total (count the total Pinterest links) results found. TikTok: total (count the total TikTok links) results found. Snapchat: total (count the total Snapchat links) results found
-    ",
+  "message": "I found the following social media links for the name: john doe. Facebook: total (count the total Facebook links) results found. Instagram: total (count the total Instagram links) results found. Twitter: total (count the total Twitter links) results found. LinkedIn: total (count the total LinkedIn links) results found. GitHub: total (count the total GitHub links) results found. YouTube: total (count the total YouTube links) results found. Pinterest: total (count the total Pinterest links) results found. TikTok: total (count the total TikTok links) results found. Snapchat: total (count the total Snapchat links) results found",
 
   "details": {
       "facebook": [comma separated list of Facebook links],
